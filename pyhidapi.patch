@@ -1,0 +1,15 @@
+--- a/pyhidapi/pyhidapi.py
++++ b/pyhidapi/pyhidapi.py
+@@ -161,11 +161,8 @@
+         if __libpath is None:
+             raise RuntimeError('Could not find the hidapi shared library.')
+
+         # Load the hidapi library.
+-        if platform == "linux" or platform == "linux2":
+-            __hidapi = CDLL(r"/usr/local/lib/{}".format(__libpath))
+-        else:
+-            __hidapi = CDLL(__libpath)
++        __hidapi = CDLL(__libpath)
+         assert __hidapi is not None
+
+         # Define argument and return types for the hidapi library functions.
