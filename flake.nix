@@ -23,6 +23,10 @@
         };
 
         patches = [./pyhidapi.patch];
+        postPatch = ''
+          substituteInPlace pyhidapi/pyhidapi.py \
+            --replace-fail '@hidapi_libusb@' '${pkgs.hidapi}/lib/libhidapi-libusb.so'
+        '';
 
         nativeBuildInputs = with pkgs.python3Packages; [setuptools];
       };
@@ -40,14 +44,12 @@
         buildInputs = [pythonEnv];
 
         buildPhase = ''
-          mkdir -p $out/bin
-          cp -a led-badge-11x44.py $out/bin/led-badge-11x44.py
+          mkdir -p $out/bin $out/etc/udev/rules.d
+          cp -a lednamebadge.py $out/bin/
+          cp -a 99-led-badge-44x11.rules $out/etc/udev/rules.d/
         '';
 
-        installPhase = ''
-          wrapProgram $out/bin/led-badge-11x44.py \
-            --prefix LD_LIBRARY_PATH : ${pkgs.lib.makeLibraryPath [pkgs.hidapi]}
-        '';
+        meta.mainProgram = "lednamebadge.py";
       };
     in {
       packages.default = package;
@@ -55,8 +57,6 @@
         packages = [
           pythonEnv
         ];
-
-        LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (with pkgs; [hidapi]);
       };
     });
 }

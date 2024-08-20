@@ -1,6 +1,14 @@
 --- a/pyhidapi/pyhidapi.py
 +++ b/pyhidapi/pyhidapi.py
-@@ -161,11 +161,8 @@
+@@ -154,18 +154,13 @@
+     global __libpath
+
+     if __hidapi is None:
+         # Search for the hidapi library.
+-        __libpath = find_library('hidapi') or\
+-                    find_library('hidapi-libusb') or\
+-                    find_library('hidapi-hidraw')
++        __libpath = '@hidapi_libusb@'
          if __libpath is None:
              raise RuntimeError('Could not find the hidapi shared library.')
 
